@@ -16,10 +16,11 @@ class MoviesController < ApplicationController
     if params[:sort] == "release_date" 
       logger.debug "flag a"
       @movies = Movie.order(:release_date)
+      @sort = "release_date"
     elsif params[:sort] == "title"
       logger.debug "flag b"
-
       @movies = Movie.order(:title)
+      @sort = "title"
     else
       logger.debug "flag c"
       @movies = Movie.all
