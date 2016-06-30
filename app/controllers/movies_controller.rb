@@ -26,6 +26,7 @@ class MoviesController < ApplicationController
       @movies = Movie.all
     end
     @all_ratings = Movie.get_ratings
+    @already_checked = Movie.get_ratings
     logger.debug "en el controller #{@all_ratings}"
   end
   
