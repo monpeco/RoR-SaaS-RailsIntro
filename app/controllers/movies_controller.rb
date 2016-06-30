@@ -11,8 +11,22 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    logger.debug "params[:sort]: #{params[:sort]}"
+
+    if params[:sort] == "release_date" 
+      logger.debug "flag a"
+      @movies = Movie.order(:release_date)
+    elsif params[:sort] == "title"
+      logger.debug "flag b"
+
+      @movies = Movie.order(:title)
+    else
+      logger.debug "flag c"
+      @movies = Movie.all
+    end
+
   end
+  
 
   def new
     # default: render 'new' template
