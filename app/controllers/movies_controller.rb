@@ -10,26 +10,40 @@ class MoviesController < ApplicationController
     # will render app/views/movies/show.<extension> by default
   end
 
-  def index
-    logger.debug "params[:sort]: #{params[:sort]}"
 
-    if params[:sort] == "release_date" 
-      #logger.debug "flag a"
-      @movies = Movie.order(:release_date)
-      @sort = "release_date"
-    elsif params[:sort] == "title"
-      #logger.debug "flag b"
-      @movies = Movie.order(:title)
-      @sort = "title"
+
+
+
+
+  def index
+    
+    @all_ratings = Movie.get_all_ratings
+
+    if params[:ratings] == nil
+      @already_checked = Movie.get_all_ratings
     else
-      #logger.debug "flag c"
-      @movies = Movie.all
+      logger.debug "CONTROLLER 2- params[:ratings]: [#{params[:ratings]}]"
+
+      @already_checked = Movie.get_selected_ratings(params[:ratings])
     end
-    @all_ratings = Movie.get_ratings
-    @already_checked = Movie.get_ratings
-    logger.debug "en el controller #{@all_ratings}"
+    
+    #logger.debug "CONTROLLER - params: [#{params}]"
+    #logger.debug "CONTROLLER - @already_checked: [#{@already_checked}]"
+
+    @sort = params[:sort]
+    @movies = Movie.sorting(params[:sort], @already_checked)
+    
+    #logger.debug "CONTROLLER - @movies: [#{@movies}]"
+
   end
   
+
+
+
+
+
+
+
 
   def new
     # default: render 'new' template
