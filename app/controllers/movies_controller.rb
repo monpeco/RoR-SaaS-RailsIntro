@@ -18,20 +18,29 @@ class MoviesController < ApplicationController
   def index
     
     @all_ratings = Movie.get_all_ratings
+    
+      logger.debug "CONTROLLER - params[:ratings]: [#{params[:ratings]}]"
+      logger.debug "CONTROLLER - params[:sort]: [#{params[:sort]}]"
 
+    if params[:ratings] == nil 
+      redirect_ratings = session[:ratings] != nil ? session[:ratings] : Movie.get_all_ratings.keys ;
+      logger.debug "CONTROLLER - redirect_to"
+      redirect_to movies_path(:ratings => redirect_ratings)
+    end
+
+     # redirect_sort = session[:sort] != nil ? session[:sort] : 'title'
+
+ 
     params[:ratings] ||= session[:ratings]
     params[:sort] ||= session[:sort]
+    
 
     if params[:ratings] == nil
       @already_checked = Movie.get_all_ratings
     else
-      logger.debug "CONTROLLER 2- params[:ratings]: [#{params[:ratings]}]"
 
       @already_checked = Movie.get_selected_ratings(params[:ratings])
     end
-    
-    #logger.debug "CONTROLLER - params: [#{params}]"
-    #logger.debug "CONTROLLER - @already_checked: [#{@already_checked}]"
 
     @sort = params[:sort]
     @movies = Movie.sorting(params[:sort], @already_checked)
