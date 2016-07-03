@@ -19,6 +19,9 @@ class MoviesController < ApplicationController
     
     @all_ratings = Movie.get_all_ratings
 
+    params[:ratings] ||= session[:ratings]
+    params[:sort] ||= session[:sort]
+
     if params[:ratings] == nil
       @already_checked = Movie.get_all_ratings
     else
@@ -33,7 +36,8 @@ class MoviesController < ApplicationController
     @sort = params[:sort]
     @movies = Movie.sorting(params[:sort], @already_checked)
     
-    #logger.debug "CONTROLLER - @movies: [#{@movies}]"
+    session[:ratings] = params[:ratings]
+    session[:sort] = params[:sort]
 
   end
   
